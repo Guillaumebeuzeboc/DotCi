@@ -54,7 +54,7 @@ public class BuildConfigurationTest {
   @Test
   public  void should_pull_latest_image_from_registry(){
     ShellCommands commands = getRunCommands();
-    Assert.assertEquals("docker-compose -f docker-compose.yml pull",commands.get(6));
+    Assert.assertEquals("docker-compose -f docker-compose.yml pull --ignore-pull-failures",commands.get(6));
   }
 
   @Test
@@ -109,7 +109,7 @@ public class BuildConfigurationTest {
   public void should_accept_alternative_docker_compose_file(){
     ShellCommands commands = getRunCommands(ImmutableMap.of("docker-compose-file", "./jenkins/docker-compose.yml", "run",  of("unit", "command")));
     Assert.assertEquals("trap \"docker-compose -f ./jenkins/docker-compose.yml kill; docker-compose -f ./jenkins/docker-compose.yml rm -v --force; exit\" PIPE QUIT INT HUP EXIT TERM",commands.get(5));
-    Assert.assertEquals("docker-compose -f ./jenkins/docker-compose.yml pull",commands.get(6));
+    Assert.assertEquals("docker-compose -f ./jenkins/docker-compose.yml pull --ignore-pull-failures",commands.get(6));
     Assert.assertEquals("export COMPOSE_CMD='docker-compose -f ./jenkins/docker-compose.yml run -T unit command'",commands.get(7));
     Assert.assertEquals(" set +e && hash unbuffer >/dev/null 2>&1 ;  if [ $? = 0 ]; then set -e && unbuffer $COMPOSE_CMD ;else set -e && $COMPOSE_CMD ;fi",commands.get(8));
   }
