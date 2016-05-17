@@ -75,6 +75,7 @@ public class BuildConfiguration {
             String dockerComposeRunCommand = getDockerComposeRunCommand(dockerComposeContainerName, fileName, runConfig);
             shellCommands.add(format("export COMPOSE_CMD='%s'",dockerComposeRunCommand));
             shellCommands.add(" set +e && hash unbuffer >/dev/null 2>&1 ;  if [ $? = 0 ]; then set -e && unbuffer $COMPOSE_CMD ;else set -e && $COMPOSE_CMD ;fi");
+            shellCommands.add(String.format("docker network rm $(docker network ls --filter name=stan -q)"));
         }
         extractWorkingDirIntoWorkSpace(dockerComposeContainerName, projectName, shellCommands);
 
